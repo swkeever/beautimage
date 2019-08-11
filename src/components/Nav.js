@@ -1,10 +1,12 @@
 import React from 'react';
 import {
-  Menu, MenuHeader, Icon, Dropdown, Input, Form, Button,
+  Menu, Icon, Input, Form,
 } from 'semantic-ui-react';
 import { animateScroll } from 'react-scroll';
-import { withRouter } from 'react-router-dom';
-import photoService from '../services/photos';
+import { withRouter, Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import ReactRouterPropTypes from 'react-router-prop-types';
+import scrollOptionsType from '../types/scrollOptions';
 
 const Nav = ({
   searchQuery,
@@ -27,7 +29,7 @@ const Nav = ({
   };
 
   const isHome = history.location.pathname === '/';
-  const headerProps = isHome ? { onClick: () => animateScroll.scrollToTop(scrollOptions) } : { href: '/' };
+  const headerProps = isHome ? { onClick: () => animateScroll.scrollToTop(scrollOptions) } : { as: Link, to: '/' };
 
   return (
     <Menu compact borderless inverted={nightMode} fixed="top">
@@ -48,7 +50,6 @@ const Nav = ({
         <Form onSubmit={executeSearch}>
           <Input
             id="search-input"
-            inverted={nightMode}
             loading={loading}
             transparent
             size="small"
@@ -56,7 +57,7 @@ const Nav = ({
             onChange={({ target }) => setSearchQuery(target.value)}
             value={searchQuery}
             placeholder="Search..."
-            icon={<Icon name="search" link onClick={executeSearch} />}
+            icon={<Icon inverted={nightMode} name="search" link onClick={executeSearch} />}
           />
         </Form>
       </Menu.Item>
@@ -65,6 +66,23 @@ const Nav = ({
       </Menu.Item>
     </Menu>
   );
+};
+
+const {
+  string, func, bool, number,
+} = PropTypes;
+
+Nav.propTypes = {
+  searchQuery: string.isRequired,
+  setSearchQuery: func.isRequired,
+  nightMode: bool.isRequired,
+  setNightMode: func.isRequired,
+  columns: number.isRequired,
+  setColumns: func.isRequired,
+  initializePhotos: func.isRequired,
+  loading: bool.isRequired,
+  history: ReactRouterPropTypes.history.isRequired,
+  scrollOptions: scrollOptionsType.isRequired,
 };
 
 export default withRouter(Nav);

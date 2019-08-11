@@ -29,7 +29,7 @@ const InfiniteScrollWrapper = ({ children, photos, getMorePhotos }) => (
 
 InfiniteScrollWrapper.propTypes = {
   children: childrenType.isRequired,
-  photos: photoType.isRequired,
+  photos: PropTypes.arrayOf(photoType).isRequired,
   getMorePhotos: PropTypes.func.isRequired,
 };
 

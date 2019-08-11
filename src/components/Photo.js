@@ -1,54 +1,57 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   Container, Loader, Image, Icon, Header, Grid, List,
 } from 'semantic-ui-react';
-import { withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import _ from 'lodash';
 import photoService from '../services/photos';
+// eslint-disable-next-line import/no-cycle
+import { MessageContext } from '../App';
 
-const Photo = ({ photoId, history }) => {
+const Photo = ({ photoId }) => {
   const [photo, setPhoto] = useState(null);
+  const [, setMessage] = useContext(MessageContext);
 
   useEffect(() => {
     const fetchPhoto = async () => {
-      const result = await photoService.getPhotoById(photoId);
+      let result = null;
+
+      try {
+        result = await photoService.getPhotoById(photoId);
+      } catch (err) {
+        setMessage({
+          type: 'error',
+          header: 'Error',
+          content: err.message,
+        });
+      }
+
       setPhoto(result);
     };
     fetchPhoto();
-  }, [photoId]);
+  }, []);
 
-  if (!photo) {
-    return <Loader />;
-  }
-
-  // useful for search more photo like this.
-  const tags = photo.tags.map(tag => tag.title);
-
-  console.log(photo);
-
-  console.log(photo.links.download_location);
-
-  const getTitle = (photo) => {
+  const getTitle = () => {
     let { title } = photo.story;
 
     if (!title) {
       title = photo.alt_description;
-
-      console.log(title)
 
       if (!title) {
         title = `Photo ${photo.id}`;
       }
     }
 
-    return title.replace(
-      /\w\S*/g,
-      txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(),
-    );
+    return _.startCase(title);
   };
+
+  if (!photo) {
+    return <Loader />;
+  }
 
   return (
     <Container className="page">
-      <Header as="h1">{getTitle(photo)}</Header>
+      <Header as="h1">{getTitle()}</Header>
       <Grid divided="vertically">
         <Grid.Row columns={2}>
           <Grid.Column>
@@ -56,7 +59,7 @@ const Photo = ({ photoId, history }) => {
           </Grid.Column>
           <Grid.Column>
             <Image avatar src={photo.user.profile_image.small} />
-            <List vertical>
+            <List>
               <List.Item>
                 <Icon name="user" />
                 {`${photo.user.first_name} ${photo.user.last_name}`}
@@ -76,9 +79,7 @@ const Photo = ({ photoId, history }) => {
             </List>
           </Grid.Column>
         </Grid.Row>
-
       </Grid>
-
       <a href={photo.links.download} download>
         <Icon size="big" name="download" link />
       </a>
@@ -86,4 +87,8 @@ const Photo = ({ photoId, history }) => {
   );
 };
 
-export default withRouter(Photo);
+Photo.propTypes = {
+  photoId: PropTypes.string.isRequired,
+};
+
+export default Photo;

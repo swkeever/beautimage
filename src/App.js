@@ -12,11 +12,14 @@ import photoService from './services/photos';
 import Nav from './components/Nav';
 import Home from './components/Home';
 import Photo from './components/Photo';
+import Notification from './components/Notification';
 
 const scrollOptions = {
-  duration: 500,
-  smooth: true,
+  duration: 1000,
+  smooth: 'easeInOutQuint',
 };
+
+export const MessageContext = React.createContext();
 
 const App = () => {
   const [photos, setPhotos] = useState([]);
@@ -25,18 +28,27 @@ const App = () => {
   const [nightMode, setNightMode] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState(null);
 
   const getMorePhotos = async (isInitialized = false) => {
     setLoading(true);
     const page = isInitialized ? 1 : currentPage;
     const items = isInitialized ? [] : photos;
 
-    const response = searchQuery
-      ? await photoService.searchPhotos(page, searchQuery)
-      : await photoService.getPhotos(page);
+    try {
+      const response = searchQuery
+        ? await photoService.searchPhotos(page, searchQuery)
+        : await photoService.getPhotos(page);
+      setPhotos(items.concat(response));
+    } catch (err) {
+      setMessage({
+        type: 'error',
+        header: 'Error',
+        content: err.message,
+      });
+    }
 
     setCurrentPage(page + 1);
-    setPhotos(items.concat(response));
     setLoading(false);
   };
 
@@ -56,42 +68,41 @@ const App = () => {
   }, []);
 
   return (
-    <Segment inverted={nightMode}>
-      <Router>
-        <Nav
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          nightMode={nightMode}
-          setNightMode={setNightMode}
-          columns={columns}
-          setColumns={setColumns}
-          initializePhotos={initializePhotos}
-          loading={loading}
-          scrollOptions={scrollOptions}
-        />
-        <Route
-          exact
-          path="/"
-          render={() => (
-            <Home
-              nightMode={nightMode}
-              getMorePhotos={getMorePhotos}
-              columns={columns}
-              photos={photos}
-              loading={loading}
-            />
-          )}
-        />
-        <Route
-          exact
-          path="/photos/:id"
-          render={({ match }) => <Photo photoId={match.params.id} />}
-        />
-      </Router>
-
-    </Segment>
-
-
+    <MessageContext.Provider value={[message, setMessage]}>
+      <Segment inverted={nightMode}>
+        <Router>
+          <Notification />
+          <Nav
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            nightMode={nightMode}
+            setNightMode={setNightMode}
+            columns={columns}
+            setColumns={setColumns}
+            initializePhotos={initializePhotos}
+            loading={loading}
+            scrollOptions={scrollOptions}
+          />
+          <Route
+            exact
+            path="/"
+            render={() => (
+              <Home
+                nightMode={nightMode}
+                getMorePhotos={getMorePhotos}
+                columns={columns}
+                photos={photos}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/photos/:id"
+            render={({ match }) => <Photo photoId={match.params.id} />}
+          />
+        </Router>
+      </Segment>
+    </MessageContext.Provider>
   );
 };
 
