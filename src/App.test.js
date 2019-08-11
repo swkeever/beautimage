@@ -1,9 +1,17 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { render, cleanup } from '@testing-library/react';
 import App from './App';
 
-it('renders without crashing', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(<App />, div);
-  ReactDOM.unmountComponentAtNode(div);
+afterEach(cleanup);
+
+describe('<App />', () => {
+  let component;
+
+  beforeEach(() => {
+    component = render(<App />);
+  });
+
+  it('contains title', () => {
+    expect(component.container).toHaveTextContent('ImageExplorer');
+  });
 });
