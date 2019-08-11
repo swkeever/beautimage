@@ -7,10 +7,10 @@ const {
 const sponsorShape = shape({
   accepted_tos: bool,
   bio: string,
-  first_name: string.isRequired,
+  first_name: string,
   id: string.isRequired,
   instagram_username: string,
-  last_name: string.isRequired,
+  last_name: string,
   links: shape({
     followers: string.isRequired,
     following: string.isRequired,
