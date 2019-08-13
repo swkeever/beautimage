@@ -7,12 +7,15 @@ import { AnimateOnChange } from 'react-animation';
 import InfiniteScrollWrapper from './InfiniteScrollWrapper';
 import Brick from './Brick';
 import photoType from '../types/photo';
+import Loading from './Loading';
 
 const Home = ({
   nightMode,
   getMorePhotos,
   columns,
   photos,
+  loading,
+  setLoading,
 }) => {
   const getColumnOfBricks = (columnIndex) => {
     const bricks = [];
@@ -24,6 +27,7 @@ const Home = ({
   };
 
   const getBricks = () => {
+    // TODO: fix loading here, should load while this function is happening.
     const result = [];
     for (let i = 0; i < columns; i += 1) {
       result.push(getColumnOfBricks(i));
@@ -31,8 +35,9 @@ const Home = ({
     return result;
   };
 
-  const bricks = (
+  const layout = (
     <Grid
+      stackable
       id="image-gallery"
       centered
       columns={columns}
@@ -44,14 +49,21 @@ const Home = ({
 
   return (
     <Container className="page">
-      <Header inverted={nightMode} as="h1" textAlign="center" icon>
+      <Header
+        inverted={nightMode}
+        as="h1"
+        textAlign="center"
+        icon
+      >
         <Icon name="image" />
-        ImageExplorer
+        beautimage
+        <Header.Subheader>A simple way to find beautiful images.</Header.Subheader>
       </Header>
       <Divider inverted={nightMode} />
       <InfiniteScrollWrapper photos={photos} getMorePhotos={getMorePhotos}>
-        {bricks}
+        {layout}
       </InfiniteScrollWrapper>
+      <Loading nightMode={nightMode} loading={loading} />
     </Container>
   );
 };
@@ -65,6 +77,8 @@ Home.propTypes = {
   getMorePhotos: func.isRequired,
   columns: number.isRequired,
   photos: arrayOf(photoType).isRequired,
+  loading: bool.isRequired,
+  setLoading: func.isRequired,
 };
 
 export default Home;
