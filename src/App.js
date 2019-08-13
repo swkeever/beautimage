@@ -6,7 +6,7 @@ import {
   Route,
 } from 'react-router-dom';
 import {
-  Segment,
+  Segment, Responsive,
 } from 'semantic-ui-react';
 import photoService from './services/photos';
 import Nav from './components/Nav';
@@ -24,21 +24,30 @@ export const MessageContext = React.createContext();
 const App = () => {
   const [photos, setPhotos] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [columns, setColumns] = useState(3);
+
+  // eslint-disable-next-line no-nested-ternary
+  const screenWidth = window.innerWidth;
+  const initialColumns = screenWidth <= Responsive.onlyMobile.maxWidth
+    ? 1
+    : screenWidth <= Responsive.onlyTablet.maxWidth
+      ? 2
+      : 3;
+
+  const [columns, setColumns] = useState(initialColumns);
   const [nightMode, setNightMode] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
 
-  const getMorePhotos = async (isInitialized = false) => {
+  const getMorePhotos = async (isInitialized = false, perPage = 10) => {
     setLoading(true);
     const page = isInitialized ? 1 : currentPage;
     const items = isInitialized ? [] : photos;
 
     try {
       const response = searchQuery
-        ? await photoService.searchPhotos(page, searchQuery)
-        : await photoService.getPhotos(page);
+        ? await photoService.searchPhotos(page, perPage, searchQuery)
+        : await photoService.getPhotos(page, perPage);
       setPhotos(items.concat(response));
     } catch (err) {
       setMessage({
@@ -62,7 +71,7 @@ const App = () => {
 
   useEffect(() => {
     const init = async () => {
-      await getMorePhotos();
+      await getMorePhotos(true);
     };
     init();
   }, []);
@@ -92,6 +101,8 @@ const App = () => {
                 getMorePhotos={getMorePhotos}
                 columns={columns}
                 photos={photos}
+                loading={loading}
+                setLoading={setLoading}
               />
             )}
           />
