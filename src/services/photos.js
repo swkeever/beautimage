@@ -1,13 +1,13 @@
 import axios from 'axios';
 
 const baseUrl = 'https://api.unsplash.com';
-const perPage = 30;
+const PER_PAGE = 10;
 
 const getAuthHeader = () => ({
   Authorization: `Client-ID ${process.env.REACT_APP_ACCESS_KEY}`,
 });
 
-const getPhotos = async (page = 1) => {
+const getPhotos = async (page = 1, perPage = PER_PAGE) => {
   const headers = getAuthHeader();
   const params = {
     page,
@@ -26,7 +26,7 @@ const getPhotoById = async (id) => {
   return result.data;
 };
 
-const searchPhotos = async (page = 1, query = '') => {
+const searchPhotos = async (page = 1, perPage = PER_PAGE, query = '') => {
   const headers = getAuthHeader();
   const params = {
     page,
