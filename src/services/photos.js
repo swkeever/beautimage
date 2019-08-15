@@ -39,8 +39,21 @@ const searchPhotos = async (page = 1, perPage = PER_PAGE, query = '') => {
   return result.data.results;
 };
 
+const getRelated = async (page = 1, perPage = PER_PAGE, id) => {
+  const headers = getAuthHeader();
+  const params = {
+    page,
+    per_page: perPage,
+  };
+  const url = `${baseUrl}/collections/${id}/related`;
+  const result = await axios.get(url, { headers, params });
+
+  return result.data;
+}
+
 export default {
   getPhotos,
   getPhotoById,
   searchPhotos,
+  getRelated,
 };
