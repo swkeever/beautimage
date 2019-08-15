@@ -39,7 +39,7 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
 
-  const getMorePhotos = async (isInitialized = false, perPage = 10) => {
+  const getMorePhotos = async (isInitialized = false, perPage = 10, id = '') => {
     setLoading(true);
     const page = isInitialized ? 1 : currentPage;
     const items = isInitialized ? [] : photos;
@@ -47,13 +47,15 @@ const App = () => {
     try {
       const response = searchQuery
         ? await photoService.searchPhotos(page, perPage, searchQuery)
-        : await photoService.getPhotos(page, perPage);
+        : id
+          ? await photoService.getRelated(page, perPage, id)
+          : await photoService.getPhotos(page, perPage);
       setPhotos(items.concat(response));
     } catch (err) {
       setMessage({
         type: 'error',
         header: 'Error',
-        content: err.message,
+        content: `${err.message}: This is probably because I am using the free version of an API. 😞`,
       });
     }
 
@@ -62,7 +64,6 @@ const App = () => {
   };
 
   const initializePhotos = async () => {
-    setLoading(true);
     animateScroll.scrollToTop(scrollOptions);
     setTimeout(async () => {
       await getMorePhotos(true);
@@ -109,7 +110,20 @@ const App = () => {
           <Route
             exact
             path="/photos/:id"
-            render={({ match }) => <Photo photoId={match.params.id} />}
+            render={({ match }) => (
+              <Photo
+                photoId={match.params.id}
+                nightMode={nightMode}
+                setSearchQuery={setSearchQuery}
+                loading={loading}
+                photos={photos}
+                setPhotos={setPhotos}
+                columns={columns}
+                getMorePhotos={getMorePhotos}
+                setLoading={setLoading}
+                scrollOptions={scrollOptions}
+              />
+            )}
           />
         </Router>
       </Segment>

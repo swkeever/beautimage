@@ -3,11 +3,8 @@ import {
   Container, Header, Divider, Icon, Grid,
 } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
-import { AnimateOnChange } from 'react-animation';
-import InfiniteScrollWrapper from './InfiniteScrollWrapper';
-import Brick from './Brick';
 import photoType from '../types/photo';
-import Loading from './Loading';
+import Masonry from './Masonry';
 
 const Home = ({
   nightMode,
@@ -17,36 +14,6 @@ const Home = ({
   loading,
   setLoading,
 }) => {
-  const getColumnOfBricks = (columnIndex) => {
-    const bricks = [];
-    for (let i = columnIndex; i < photos.length; i += columns) {
-      const photo = photos[i];
-      bricks.push(<Brick key={`img-${i}`} photo={photo} />);
-    }
-    return <Grid.Column key={`col-${columnIndex}`}>{bricks}</Grid.Column>;
-  };
-
-  const getBricks = () => {
-    // TODO: fix loading here, should load while this function is happening.
-    const result = [];
-    for (let i = 0; i < columns; i += 1) {
-      result.push(getColumnOfBricks(i));
-    }
-    return result;
-  };
-
-  const layout = (
-    <Grid
-      stackable
-      id="image-gallery"
-      centered
-      columns={columns}
-      padded
-    >
-      {getBricks()}
-    </Grid>
-  );
-
   return (
     <Container className="page">
       <Header
@@ -60,10 +27,13 @@ const Home = ({
         <Header.Subheader>A simple way to find beautiful images.</Header.Subheader>
       </Header>
       <Divider inverted={nightMode} />
-      <InfiniteScrollWrapper photos={photos} getMorePhotos={getMorePhotos}>
-        {layout}
-      </InfiniteScrollWrapper>
-      <Loading nightMode={nightMode} loading={loading} />
+      <Masonry
+        photos={photos}
+        getMorePhotos={getMorePhotos}
+        nightMode={nightMode}
+        loading={loading}
+        columns={columns}
+      />
     </Container>
   );
 };

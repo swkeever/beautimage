@@ -12,7 +12,7 @@ const Loading = ({ loading }) => (
 );
 
 const InfiniteScrollWrapper = ({
-  children, photos, getMorePhotos
+  children, photos, getMorePhotos,
 }) => (
   <InfiniteScroll
     dataLength={photos.length} // This is important field to render the next data

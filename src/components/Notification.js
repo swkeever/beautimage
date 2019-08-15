@@ -12,7 +12,7 @@ const style = {
 
 const Notification = () => {
   const [message, setMessage] = useContext(MessageContext);
-  const duration = 5000;
+  const duration = 10000;
 
   setTimeout(() => {
     setMessage(null);

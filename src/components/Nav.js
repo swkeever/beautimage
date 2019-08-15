@@ -22,18 +22,16 @@ const Nav = ({
 }) => {
   const executeSearch = async (event) => {
     event.preventDefault();
-
     history.push('/');
-
     await initializePhotos();
   };
 
   const isHome = history.location.pathname === '/';
-  const headerProps = isHome ? { onClick: () => animateScroll.scrollToTop(scrollOptions) } : { as: Link, to: '/' };
+  const linkBehavior = isHome ? () => animateScroll.scrollToTop(scrollOptions) : executeSearch;
 
   return (
     <Menu borderless inverted={nightMode} fixed="top">
-      <Menu.Item header {...headerProps}>
+      <Menu.Item header onClick={linkBehavior}>
         <Icon name="image" />
         <Responsive minWidth={Responsive.onlyMobile.maxWidth}>
           beautimage
@@ -41,13 +39,13 @@ const Nav = ({
       </Menu.Item>
       <Responsive minWidth={Responsive.onlyMobile.maxWidth}>
         <Menu secondary>
-          <Menu.Item disabled={!isHome} active={columns === 1} onClick={() => setColumns(1)}>
+          <Menu.Item active={columns === 1} onClick={() => setColumns(1)}>
             <Icon name="list layout" />
           </Menu.Item>
-          <Menu.Item disabled={!isHome} active={columns === 2} onClick={() => setColumns(2)}>
+          <Menu.Item active={columns === 2} onClick={() => setColumns(2)}>
             <Icon name="block layout" />
           </Menu.Item>
-          <Menu.Item disabled={!isHome} active={columns === 3} onClick={() => setColumns(3)}>
+          <Menu.Item active={columns === 3} onClick={() => setColumns(3)}>
             <Icon name="grid layout" />
           </Menu.Item>
         </Menu>
