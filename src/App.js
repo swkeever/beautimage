@@ -39,17 +39,22 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
 
-  const getMorePhotos = async (isInitialized = false, perPage = 10, id = '') => {
+  const getMorePhotos = async (
+    isInitialized = false,
+    perPage = 10,
+    tags = '') => {
     setLoading(true);
     const page = isInitialized ? 1 : currentPage;
     const items = isInitialized ? [] : photos;
 
+    console.log('q', searchQuery)
+    console.log('tags', tags);
+    console.log('page', page);
+
     try {
-      const response = searchQuery
-        ? await photoService.searchPhotos(page, perPage, searchQuery)
-        : id
-          ? await photoService.getRelated(page, perPage, id)
-          : await photoService.getPhotos(page, perPage);
+      const response = searchQuery || tags
+        ? await photoService.searchPhotos(page, perPage, searchQuery || tags)
+        : await photoService.getPhotos(page, perPage);
       setPhotos(items.concat(response));
     } catch (err) {
       setMessage({

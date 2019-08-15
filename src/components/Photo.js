@@ -10,6 +10,7 @@ import photoService from '../services/photos';
 import { MessageContext } from '../App';
 import photoType from '../types/photo';
 import Masonry from './Masonry';
+import scrollOptionsType from '../types/scrollOptions';
 
 
 const Photo = ({
@@ -25,6 +26,7 @@ const Photo = ({
 }) => {
   const [photo, setPhoto] = useState(null);
   const [, setMessage] = useContext(MessageContext);
+  const [tags, setTags] = useState('');
 
   useEffect(() => {
     const fetchPhoto = async () => {
@@ -35,7 +37,13 @@ const Photo = ({
 
       try {
         result = await photoService.getPhotoById(photoId);
-        await getMorePhotos(true, 15, photoId);
+        const selectedTags = result.tags
+          .slice(0, Math.min(3, result.tags.length))
+          .map(tag => tag.title)
+          .filter(tag => tag.length > 3)
+          .join(' ');
+        setTags(selectedTags);
+        await getMorePhotos(false, 10, selectedTags);
       } catch (err) {
         setMessage({
           type: 'error',
@@ -69,6 +77,8 @@ const Photo = ({
     return <Loader />;
   }
 
+  const filteredPhotos = photos.filter(p => p.id !== photoId);
+
   const socialMedia = (type) => {
     const handle = _.get(photo, `user.${type}_username`);
 
@@ -82,8 +92,6 @@ const Photo = ({
       </Menu.Item>
     );
   };
-
-  const filteredPhotos = photos.filter(p => p.id.toString() !== photoId);
 
   return (
     <Container className="page">
@@ -128,7 +136,7 @@ const Photo = ({
       <Header as="h2">Related</Header>
       <Masonry
         photos={filteredPhotos}
-        getMorePhotos={getMorePhotos}
+        getMorePhotos={() => getMorePhotos(false, 10, tags)}
         nightMode={nightMode}
         loading={loading}
         columns={columns}
@@ -147,6 +155,7 @@ Photo.propTypes = {
   columns: PropTypes.number.isRequired,
   getMorePhotos: PropTypes.func.isRequired,
   setLoading: PropTypes.func.isRequired,
+  scrollOptions: scrollOptionsType.isRequired,
 };
 
 export default Photo;

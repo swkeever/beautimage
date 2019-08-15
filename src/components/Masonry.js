@@ -13,6 +13,7 @@ const Masonry = ({
   loading,
   columns,
   photoId,
+  hasMore,
 }) => {
   const getColumnOfBricks = (columnIndex) => {
     const bricks = [];
@@ -46,12 +47,17 @@ const Masonry = ({
 
   return (
     <div>
-      <InfiniteScrollWrapper photos={photos} getMorePhotos={() => getMorePhotos(false, 10, photoId)}>
+      <InfiniteScrollWrapper hasMore={hasMore} photos={photos} getMorePhotos={getMorePhotos}>
         {layout}
       </InfiniteScrollWrapper>
       <Loading nightMode={nightMode} loading={loading} />
     </div>
   );
+};
+
+Masonry.defaultProps = {
+  photoId: null,
+  hasMore: true,
 };
 
 Masonry.propTypes = {
@@ -61,6 +67,7 @@ Masonry.propTypes = {
   loading: PropTypes.bool.isRequired,
   columns: PropTypes.number.isRequired,
   photoId: PropTypes.string,
+  hasMore: PropTypes.bool,
 };
 
 export default Masonry;

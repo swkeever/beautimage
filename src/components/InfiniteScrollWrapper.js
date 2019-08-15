@@ -12,13 +12,13 @@ const Loading = ({ loading }) => (
 );
 
 const InfiniteScrollWrapper = ({
-  children, photos, getMorePhotos,
+  children, photos, getMorePhotos, hasMore,
 }) => (
   <InfiniteScroll
     dataLength={photos.length} // This is important field to render the next data
     next={getMorePhotos}
     scrollableTarget="iamge-gallery"
-    hasMore
+    hasMore={hasMore}
     endMessage={(
       <p style={{ textAlign: 'center' }}>
         <b>Yay! You have seen it all</b>
@@ -29,10 +29,15 @@ const InfiniteScrollWrapper = ({
   </InfiniteScroll>
 );
 
+InfiniteScrollWrapper.defaultProps = {
+  hasMore: true,
+};
+
 InfiniteScrollWrapper.propTypes = {
   children: childrenType.isRequired,
   photos: PropTypes.arrayOf(photoType).isRequired,
   getMorePhotos: PropTypes.func.isRequired,
+  hasMore: PropTypes.bool,
 };
 
 export default InfiniteScrollWrapper;
