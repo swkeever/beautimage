@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import photoService, { PER_PAGE } from '../services/photos';
 
 const photoReducer = async (options) => {

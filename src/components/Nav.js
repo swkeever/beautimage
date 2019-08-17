@@ -7,10 +7,8 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import scrollOptionsType from '../types/scrollOptions';
-import photoReducer from '../reducers/photoReducer';
 
 const Nav = ({
-  searchQuery,
   setSearchQuery,
   nightMode,
   setNightMode,
@@ -29,11 +27,11 @@ const Nav = ({
     history.push('/');
   };
 
-  const backHome = async (event) => {
+  const backHome = async () => {
     setSearch('');
     setSearchQuery('');
     history.push('/');
-  }
+  };
 
   const isHome = history.location.pathname === '/';
   const linkBehavior = isHome ? () => animateScroll.scrollToTop(scrollOptions) : backHome;
@@ -82,11 +80,10 @@ const Nav = ({
 };
 
 const {
-  string, func, bool, number,
+  func, bool, number,
 } = PropTypes;
 
 Nav.propTypes = {
-  searchQuery: string.isRequired,
   setSearchQuery: func.isRequired,
   nightMode: bool.isRequired,
   setNightMode: func.isRequired,

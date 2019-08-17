@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {
   Container, Header, Image, Loader, List, Icon,
 } from 'semantic-ui-react';
-import _ from 'lodash';
 import Masonry from './Masonry';
 import { MessageContext } from '../App';
 import photoReducer from '../reducers/photoReducer';
