@@ -1,17 +1,18 @@
 import React, { useState, useEffect, useContext } from 'react';
 import {
-  Container, Loader, Image, Icon, Header, Grid, Menu, List, Button, Label, Responsive,
+  Container, Loader, Image, Icon, Header, Grid, Menu, Button, Label, Responsive,
 } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { animateScroll } from 'react-scroll';
+import { withRouter } from 'react-router-dom';
+import ReactRouterPropTypes from 'react-router-prop-types';
 import photoService from '../services/photos';
 // eslint-disable-next-line import/no-cycle
 import { MessageContext } from '../App';
 import photoType from '../types/photo';
 import Masonry from './Masonry';
 import scrollOptionsType from '../types/scrollOptions';
-
 
 const Photo = ({
   photoId,
@@ -23,6 +24,7 @@ const Photo = ({
   getMorePhotos,
   setLoading,
   scrollOptions,
+  history,
 }) => {
   const [photo, setPhoto] = useState(null);
   const [, setMessage] = useContext(MessageContext);
@@ -43,7 +45,7 @@ const Photo = ({
           .filter(tag => tag.length > 3)
           .join(' ');
         setTags(selectedTags);
-        await getMorePhotos(false, 10, selectedTags);
+        await getMorePhotos(true, 10, { type: 'search', data: selectedTags });
       } catch (err) {
         setMessage({
           type: 'error',
@@ -87,10 +89,17 @@ const Photo = ({
     }
 
     return (
-      <Menu.Item link={`https://www.${type}.com/${handle}`}>
-        <Icon name={type} />
+      <Menu.Item link>
+        <a href={`https://www.${type}.com/${handle}`}>
+          <Icon name={type} />
+        </a>
       </Menu.Item>
     );
+  };
+
+  const goToUserPage = () => {
+    animateScroll.scrollToTop(scrollOptions);
+    history.push(`/users/${photo.user.username}`);
   };
 
   return (
@@ -111,15 +120,22 @@ const Photo = ({
           />
         </Grid.Column>
       </Grid>
-
       <Menu borderless inverted={nightMode}>
-        <Menu.Item header>
+        <Menu.Item header link onClick={goToUserPage}>
           <Image style={{ paddingRight: '3px' }} avatar src={photo.user.profile_image.small} />
           {`${photo.user.first_name} ${photo.user.last_name}`}
         </Menu.Item>
         {socialMedia('instagram')}
         {socialMedia('twitter')}
-        <Menu.Item position="right">
+        <Menu.Item position="right" link>
+          <a href={photo.links.download} download>
+            <Icon
+              name="download"
+            />
+          </a>
+
+        </Menu.Item>
+        <Menu.Item>
           <Button as="div" labelPosition="right">
             <Button color="red">
               <Icon name="heart" />
@@ -136,7 +152,7 @@ const Photo = ({
       <Header as="h2">Related</Header>
       <Masonry
         photos={filteredPhotos}
-        getMorePhotos={() => getMorePhotos(false, 10, tags)}
+        getMorePhotos={() => getMorePhotos(false, 10, { type: 'search', data: tags })}
         nightMode={nightMode}
         loading={loading}
         columns={columns}
@@ -156,6 +172,7 @@ Photo.propTypes = {
   getMorePhotos: PropTypes.func.isRequired,
   setLoading: PropTypes.func.isRequired,
   scrollOptions: scrollOptionsType.isRequired,
+  history: ReactRouterPropTypes.history.isRequired,
 };
 
-export default Photo;
+export default withRouter(Photo);

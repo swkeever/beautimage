@@ -3,7 +3,7 @@ import {
   Menu, Icon, Input, Form, Responsive,
 } from 'semantic-ui-react';
 import { animateScroll } from 'react-scroll';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import scrollOptionsType from '../types/scrollOptions';
@@ -26,8 +26,13 @@ const Nav = ({
     await initializePhotos();
   };
 
+  const backHome = async (event) => {
+    setSearchQuery('');
+    await executeSearch(event);
+  };
+
   const isHome = history.location.pathname === '/';
-  const linkBehavior = isHome ? () => animateScroll.scrollToTop(scrollOptions) : executeSearch;
+  const linkBehavior = isHome ? () => animateScroll.scrollToTop(scrollOptions) : backHome;
 
   return (
     <Menu borderless inverted={nightMode} fixed="top">

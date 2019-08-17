@@ -1,15 +1,8 @@
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { Loader, Dimmer } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import childrenType from '../types/children';
 import photoType from '../types/photo';
-
-const Loading = ({ loading }) => (
-  <Dimmer active={loading}>
-    <Loader />
-  </Dimmer>
-);
 
 const InfiniteScrollWrapper = ({
   children, photos, getMorePhotos, hasMore,

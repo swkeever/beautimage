@@ -39,10 +39,14 @@ const searchPhotos = async (page = 1, perPage = PER_PAGE, query = '') => {
   return result.data.results;
 };
 
-const getRelated = async (id) => {
+const getUserPhotos = async (page = 1, perPage = PER_PAGE, username) => {
   const headers = getAuthHeader();
-  const url = `${baseUrl}/collections/${id}/photos`;
-  const result = await axios.get(url, { headers });
+  const params = {
+    page,
+    per_page: perPage,
+  };
+  const url = `${baseUrl}/users/${username}/photos`;
+  const result = await axios.get(url, { headers, params });
 
   return result.data;
 };
@@ -51,5 +55,5 @@ export default {
   getPhotos,
   getPhotoById,
   searchPhotos,
-  getRelated,
+  getUserPhotos,
 };

@@ -13,6 +13,7 @@ import Nav from './components/Nav';
 import Home from './components/Home';
 import Photo from './components/Photo';
 import Notification from './components/Notification';
+import User from './components/User';
 
 const scrollOptions = {
   duration: 1000,
@@ -21,19 +22,20 @@ const scrollOptions = {
 
 export const MessageContext = React.createContext();
 
+const getInitialColumns = () => {
+  const screenWidth = window.innerWidth;
+  if (screenWidth <= Responsive.onlyMobile.maxWidth) {
+    return 1;
+  } if (screenWidth <= Responsive.onlyTablet.maxWidth) {
+    return 2;
+  }
+  return 3;
+};
+
 const App = () => {
   const [photos, setPhotos] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-
-  // eslint-disable-next-line no-nested-ternary
-  const screenWidth = window.innerWidth;
-  const initialColumns = screenWidth <= Responsive.onlyMobile.maxWidth
-    ? 1
-    : screenWidth <= Responsive.onlyTablet.maxWidth
-      ? 2
-      : 3;
-
-  const [columns, setColumns] = useState(initialColumns);
+  const [columns, setColumns] = useState(getInitialColumns());
   const [nightMode, setNightMode] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
@@ -42,25 +44,34 @@ const App = () => {
   const getMorePhotos = async (
     isInitialized = false,
     perPage = 10,
-    tags = '') => {
+    action = { type: 'photos' }) => {
     setLoading(true);
     const page = isInitialized ? 1 : currentPage;
     const items = isInitialized ? [] : photos;
 
-    console.log('q', searchQuery)
-    console.log('tags', tags);
-    console.log('page', page);
-
     try {
-      const response = searchQuery || tags
-        ? await photoService.searchPhotos(page, perPage, searchQuery || tags)
-        : await photoService.getPhotos(page, perPage);
+      let response;
+
+      switch (action.type) {
+        case 'photos':
+          response = await photoService.getPhotos(page, perPage);
+          break;
+        case 'search':
+          response = await photoService.searchPhotos(page, perPage, action.data);
+          break;
+        case 'user':
+          response = await photoService.getUserPhotos(page, perPage, action.data);
+          break;
+        default:
+          throw new Error(`invalid type ${action.type}`);
+      }
+
       setPhotos(items.concat(response));
     } catch (err) {
       setMessage({
         type: 'error',
         header: 'Error',
-        content: `${err.message}: This is probably because I am using the free version of an API. 😞`,
+        content: err.message,
       });
     }
 
@@ -108,7 +119,6 @@ const App = () => {
                 columns={columns}
                 photos={photos}
                 loading={loading}
-                setLoading={setLoading}
               />
             )}
           />
@@ -127,6 +137,19 @@ const App = () => {
                 getMorePhotos={getMorePhotos}
                 setLoading={setLoading}
                 scrollOptions={scrollOptions}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/users/:username"
+            render={({ match }) => (
+              <User
+                username={match.params.username}
+                nightMode={nightMode}
+                loading={loading}
+                setLoading={setLoading}
+                columns={columns}
               />
             )}
           />

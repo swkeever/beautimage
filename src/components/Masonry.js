@@ -12,7 +12,6 @@ const Masonry = ({
   nightMode,
   loading,
   columns,
-  photoId,
   hasMore,
 }) => {
   const getColumnOfBricks = (columnIndex) => {
@@ -56,7 +55,6 @@ const Masonry = ({
 };
 
 Masonry.defaultProps = {
-  photoId: null,
   hasMore: true,
 };
 
@@ -66,7 +64,6 @@ Masonry.propTypes = {
   nightMode: PropTypes.bool.isRequired,
   loading: PropTypes.bool.isRequired,
   columns: PropTypes.number.isRequired,
-  photoId: PropTypes.string,
   hasMore: PropTypes.bool,
 };
 

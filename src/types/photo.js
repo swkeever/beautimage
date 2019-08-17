@@ -54,7 +54,7 @@ const photoType = shape({
     self: string.isRequired,
   }).isRequired,
   sponsorship: shape({
-    impressions_id: string.isRequired,
+    impressions_id: string,
     sponsor: sponsorShape.isRequired,
     tagline: string.isRequired,
   }),
