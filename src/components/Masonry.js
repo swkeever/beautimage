@@ -18,7 +18,7 @@ const Masonry = ({
     const bricks = [];
     for (let i = columnIndex; i < photos.length; i += columns) {
       const photo = photos[i];
-      bricks.push(<Brick key={`img-${i}`} photo={photo} />);
+      bricks.push(<Brick key={photo.id} photo={photo} />);
     }
     return <Grid.Column key={`col-${columnIndex}`}>{bricks}</Grid.Column>;
   };
@@ -44,6 +44,7 @@ const Masonry = ({
     </Grid>
   );
 
+
   return (
     <div>
       <InfiniteScrollWrapper hasMore={hasMore} photos={photos} getMorePhotos={getMorePhotos}>
@@ -55,7 +56,7 @@ const Masonry = ({
 };
 
 Masonry.defaultProps = {
-  hasMore: true,
+  hasMore: false,
 };
 
 Masonry.propTypes = {

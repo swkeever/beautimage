@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Menu, Icon, Input, Form, Responsive,
 } from 'semantic-ui-react';
@@ -7,6 +7,7 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import scrollOptionsType from '../types/scrollOptions';
+import photoReducer from '../reducers/photoReducer';
 
 const Nav = ({
   searchQuery,
@@ -15,21 +16,24 @@ const Nav = ({
   setNightMode,
   columns,
   setColumns,
-  initializePhotos,
   loading,
   history,
   scrollOptions,
 }) => {
+  const [search, setSearch] = useState('');
+
   const executeSearch = async (event) => {
     event.preventDefault();
+    animateScroll.scrollToTop(scrollOptions);
+    setSearchQuery(search);
     history.push('/');
-    await initializePhotos();
   };
 
   const backHome = async (event) => {
+    setSearch('');
     setSearchQuery('');
-    await executeSearch(event);
-  };
+    history.push('/');
+  }
 
   const isHome = history.location.pathname === '/';
   const linkBehavior = isHome ? () => animateScroll.scrollToTop(scrollOptions) : backHome;
@@ -63,8 +67,8 @@ const Nav = ({
             transparent
             size="small"
             type="text"
-            onChange={({ target }) => setSearchQuery(target.value)}
-            value={searchQuery}
+            onChange={({ target }) => setSearch(target.value)}
+            value={search}
             placeholder="Search..."
             icon={<Icon inverted={nightMode} name="search" link onClick={executeSearch} />}
           />
@@ -88,7 +92,6 @@ Nav.propTypes = {
   setNightMode: func.isRequired,
   columns: number.isRequired,
   setColumns: func.isRequired,
-  initializePhotos: func.isRequired,
   loading: bool.isRequired,
   history: ReactRouterPropTypes.history.isRequired,
   scrollOptions: scrollOptionsType.isRequired,

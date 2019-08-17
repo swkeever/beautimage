@@ -1,17 +1,17 @@
 import axios from 'axios';
 
 const baseUrl = 'https://api.unsplash.com';
-const PER_PAGE = 10;
+export const PER_PAGE = 12;
 
 const getAuthHeader = () => ({
   Authorization: `Client-ID ${process.env.REACT_APP_ACCESS_KEY}`,
 });
 
-const getPhotos = async (page = 1, perPage = PER_PAGE) => {
+const getPhotos = async (page) => {
   const headers = getAuthHeader();
   const params = {
     page,
-    per_page: perPage,
+    per_page: PER_PAGE,
   };
   const url = `${baseUrl}/photos`;
   const result = await axios.get(url, { headers, params });
@@ -26,11 +26,11 @@ const getPhotoById = async (id) => {
   return result.data;
 };
 
-const searchPhotos = async (page = 1, perPage = PER_PAGE, query = '') => {
+const searchPhotos = async (page, query) => {
   const headers = getAuthHeader();
   const params = {
     page,
-    per_page: perPage,
+    per_page: PER_PAGE,
     query,
   };
   const url = `${baseUrl}/search/photos`;
@@ -39,11 +39,11 @@ const searchPhotos = async (page = 1, perPage = PER_PAGE, query = '') => {
   return result.data.results;
 };
 
-const getUserPhotos = async (page = 1, perPage = PER_PAGE, username) => {
+const getUserPhotos = async (page, username) => {
   const headers = getAuthHeader();
   const params = {
     page,
-    per_page: perPage,
+    per_page: PER_PAGE,
   };
   const url = `${baseUrl}/users/${username}/photos`;
   const result = await axios.get(url, { headers, params });

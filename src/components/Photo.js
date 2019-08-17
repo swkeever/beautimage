@@ -10,29 +10,28 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 import photoService from '../services/photos';
 // eslint-disable-next-line import/no-cycle
 import { MessageContext } from '../App';
-import photoType from '../types/photo';
 import Masonry from './Masonry';
 import scrollOptionsType from '../types/scrollOptions';
+import photoReducer from '../reducers/photoReducer';
 
 const Photo = ({
   photoId,
   nightMode,
-  setSearchQuery,
-  loading,
-  photos,
   columns,
-  getMorePhotos,
-  setLoading,
   scrollOptions,
   history,
 }) => {
+  const [photos, setPhotos] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(false);
   const [photo, setPhoto] = useState(null);
+  const [hasMore, setHasMore] = useState(false);
   const [, setMessage] = useContext(MessageContext);
   const [tags, setTags] = useState('');
 
   useEffect(() => {
     const fetchPhoto = async () => {
-      let result = null;
+      let result;
       setLoading(true);
 
       animateScroll.scrollToTop(scrollOptions);
@@ -40,22 +39,32 @@ const Photo = ({
       try {
         result = await photoService.getPhotoById(photoId);
         const selectedTags = result.tags
-          .slice(0, Math.min(3, result.tags.length))
+          .slice(0, Math.min(5, result.tags.length))
           .map(tag => tag.title)
           .filter(tag => tag.length > 3)
           .join(' ');
         setTags(selectedTags);
-        await getMorePhotos(true, 10, { type: 'search', data: selectedTags });
+        setPhoto(result);
+        photoReducer({
+          isInit: true,
+          actionType: 'search',
+          actionData: selectedTags,
+          photos,
+          currentPage,
+          setPhotos,
+          setCurrentPage,
+          setLoading,
+          setMessage,
+          setHasMore,
+        });
       } catch (err) {
         setMessage({
           type: 'error',
           header: 'Error',
           content: err.message,
         });
-        setSearchQuery('');
       }
 
-      setPhoto(result);
       setLoading(false);
     };
     fetchPhoto();
@@ -102,6 +111,19 @@ const Photo = ({
     history.push(`/users/${photo.user.username}`);
   };
 
+  const getMorePhotos = () => photoReducer({
+    isInit: false,
+    actionType: 'search',
+    actionData: tags,
+    photos,
+    currentPage,
+    setPhotos,
+    setCurrentPage,
+    setLoading,
+    setMessage,
+    setHasMore,
+  });
+
   return (
     <Container className="page">
       <Header inverted={nightMode} as="h2">
@@ -133,7 +155,6 @@ const Photo = ({
               name="download"
             />
           </a>
-
         </Menu.Item>
         <Menu.Item>
           <Button as="div" labelPosition="right">
@@ -152,11 +173,12 @@ const Photo = ({
       <Header as="h2">Related</Header>
       <Masonry
         photos={filteredPhotos}
-        getMorePhotos={() => getMorePhotos(false, 10, { type: 'search', data: tags })}
+        getMorePhotos={getMorePhotos}
         nightMode={nightMode}
         loading={loading}
         columns={columns}
         photoId={photoId}
+        hasMore={hasMore}
       />
     </Container>
   );
@@ -165,12 +187,7 @@ const Photo = ({
 Photo.propTypes = {
   photoId: PropTypes.string.isRequired,
   nightMode: PropTypes.bool.isRequired,
-  setSearchQuery: PropTypes.func.isRequired,
-  loading: PropTypes.bool.isRequired,
-  photos: PropTypes.arrayOf(photoType).isRequired,
   columns: PropTypes.number.isRequired,
-  getMorePhotos: PropTypes.func.isRequired,
-  setLoading: PropTypes.func.isRequired,
   scrollOptions: scrollOptionsType.isRequired,
   history: ReactRouterPropTypes.history.isRequired,
 };

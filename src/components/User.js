@@ -3,53 +3,65 @@ import PropTypes from 'prop-types';
 import {
   Container, Header, Image, Loader, List, Icon,
 } from 'semantic-ui-react';
-import photoService from '../services/photos';
+import _ from 'lodash';
 import Masonry from './Masonry';
 import { MessageContext } from '../App';
+import photoReducer from '../reducers/photoReducer';
 
 const User = ({
   username,
   nightMode,
-  loading,
   columns,
 }) => {
   const [photos, setPhotos] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [, setMessage] = useContext(MessageContext);
 
-  const getMorePhotos = async (isInit = false) => {
-    const page = isInit ? 1 : currentPage;
-    try {
-      const response = await photoService.getUserPhotos(page, 10, username);
-      setPhotos(photos.concat(response));
-      setCurrentPage(page + 1);
-    } catch (err) {
-      setMessage({
-        type: 'error',
-        header: 'Error',
-        content: err.message,
-      });
-    }
-  };
-
   useEffect(() => {
-    const fetchPhotos = async () => {
-      await getMorePhotos(true);
-    };
-    fetchPhotos();
-  }, []);
+    photoReducer({
+      isInit: true,
+      actionType: 'user',
+      actionData: username,
+      photos,
+      setPhotos,
+      currentPage,
+      setCurrentPage,
+      setLoading,
+      setMessage,
+      setHasMore,
+    });
+  }, [username]);
+
+  const getMorePhotos = () => photoReducer({
+    isInit: false,
+    actionType: 'user',
+    actionData: username,
+    photos,
+    setPhotos,
+    currentPage,
+    setCurrentPage,
+    setLoading,
+    setMessage,
+    setHasMore,
+  });
 
   const getSocialMediaLink = (socialInfo) => {
     const { url, iconName, isAvailable } = socialInfo;
+
     if (!isAvailable) {
       return null;
     }
+
     return (
       <List.Item>
-        <Icon
-          name={iconName}
-          link={url}
-        />
+        <a href={url}>
+          <Icon
+            name={iconName}
+            link
+          />
+        </a>
       </List.Item>
     );
   };
@@ -69,9 +81,8 @@ const User = ({
           circular
           src={user.profile_image.large}
         />
-        {`${user.first_name} ${user.last_name}`}
+        {`${user.first_name} ${user.last_name || ''}`}
       </Header>
-
       <Container textAlign="center">
         <List inverted={nightMode} horizontal>
           {getSocialMediaLink({
@@ -82,23 +93,22 @@ const User = ({
           {getSocialMediaLink({
             isAvailable: !!user.instagram_username,
             iconName: 'instagram',
-            url: user.instagram_username,
+            url: `https://www.instagram.com/${user.instagram_username}`,
           })}
           {getSocialMediaLink({
             isAvailable: !!user.twitter_username,
             iconName: 'twitter',
-            url: user.twitter_username,
+            url: `https://www.twitter.com/${user.twitter_username}`,
           })}
         </List>
       </Container>
-
-
       <Masonry
         photos={photos}
         getMorePhotos={getMorePhotos}
         nightMode={nightMode}
         loading={loading}
         columns={columns}
+        hasMore={hasMore}
       />
     </Container>
   );
@@ -107,7 +117,6 @@ const User = ({
 User.propTypes = {
   username: PropTypes.string.isRequired,
   nightMode: PropTypes.bool.isRequired,
-  loading: PropTypes.bool.isRequired,
   columns: PropTypes.number.isRequired,
 };
 
