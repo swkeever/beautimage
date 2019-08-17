@@ -62,7 +62,7 @@ const User = ({
 
   return (
     <Container className="page">
-      <Header textAlign="center" as="h1">
+      <Header inverted={nightMode} textAlign="center" as="h1">
         <Image
           style={{ padding: '2px' }}
           centered
@@ -73,7 +73,7 @@ const User = ({
       </Header>
 
       <Container textAlign="center">
-        <List horizontal>
+        <List inverted={nightMode} horizontal>
           {getSocialMediaLink({
             isAvailable: !!user.portfolio_url,
             iconName: 'briefcase',
