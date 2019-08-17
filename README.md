@@ -13,6 +13,12 @@ REACT_APP_ACCESS_KEY=<access_key>
 REACT_APP_SECRET_KEY=<secret_key>
 ```
 
+## Important
+
+Because I'm doing this project just for fun, I'm using the Unsplash API in demo mode and [rate limiting](https://unsplash.com/documentation#rate-limiting) is enforced.
+
+ Therefore if you do too many searches using the app, you may get an error saying you received a [403 forbidden status code](https://en.wikipedia.org/wiki/HTTP_403). This means that you exceeded the rate limit.
+
 ## Licence
 
 MIT
