@@ -47,7 +47,7 @@ const Masonry = ({
 
   return (
     <div>
-      <InfiniteScrollWrapper hasMore={hasMore} photos={photos} getMorePhotos={getMorePhotos}>
+      <InfiniteScrollWrapper nightMode={nightMode} hasMore={hasMore} photos={photos} getMorePhotos={getMorePhotos}>
         {layout}
       </InfiniteScrollWrapper>
       <Loading nightMode={nightMode} loading={loading} />

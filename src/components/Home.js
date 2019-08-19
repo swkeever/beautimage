@@ -59,8 +59,9 @@ const Home = ({
         icon
       >
         <Icon name="image" />
-        beautimage
-        <Header.Subheader>A simple way to find beautiful images.</Header.Subheader>
+        beaut
+        <span className="primary">image</span>
+        <Header.Subheader>a simple way to find beautiful images.</Header.Subheader>
       </Header>
       <Divider inverted={nightMode} />
       <Masonry

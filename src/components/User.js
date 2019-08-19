@@ -59,6 +59,7 @@ const User = ({
           <Icon
             name={iconName}
             link
+            size="large"
           />
         </a>
       </List.Item>
@@ -75,14 +76,18 @@ const User = ({
     <Container className="page">
       <Header inverted={nightMode} textAlign="center" as="h1">
         <Image
-          style={{ padding: '2px' }}
+          style={{ marginRight: '0.5rem' }}
           centered
           circular
           src={user.profile_image.large}
         />
-        {`${user.first_name} ${user.last_name || ''}`}
+        {user.first_name.toLowerCase()}
+        &nbsp;
+        <span className="primary">
+          {user.last_name ? user.last_name.toLowerCase() : ''}
+        </span>
       </Header>
-      <Container textAlign="center">
+      <Container style={{margin: '1.5rem 0'}} textAlign="center">
         <List inverted={nightMode} horizontal>
           {getSocialMediaLink({
             isAvailable: !!user.portfolio_url,

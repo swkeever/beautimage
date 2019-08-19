@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import {
-  Container, Loader, Image, Icon, Header, Grid, Menu, Button, Label, Responsive,
+  Container, Loader, Image, Icon, Header, Grid, Menu, Button, Label, Responsive, Sidebar, Segment,
 } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
@@ -81,7 +81,7 @@ const Photo = ({
       }
     }
 
-    return _.startCase(title);
+    return title.toLowerCase();
   };
 
   if (!photo) {
@@ -101,6 +101,7 @@ const Photo = ({
       <Menu.Item link>
         <a href={`https://www.${type}.com/${handle}`}>
           <Icon name={type} />
+          {type}
         </a>
       </Menu.Item>
     );
@@ -124,28 +125,44 @@ const Photo = ({
     setHasMore,
   });
 
+  const photoStyle = photo.width > photo.height 
+  ? {width: '100vw', height: 'auto'}
+  : {height: '100vh', width: 'auto'};
+
   return (
     <Container className="page">
-      <Header inverted={nightMode} as="h2">
-        {getTitle()}
-        <Header.Subheader>{`Photo by ${photo.user.first_name} ${photo.user.last_name}`}</Header.Subheader>
-
-      </Header>
-      <Grid>
-        <Grid.Column columns={1}>
-          <Image
-            bordered
-            src={photo.urls.thumb}
-            srcSet={`${photo.urls.thumb} 200w, 
+      <Container>
+        <Header
+          textAlign="center"
+          inverted={nightMode}
+          as="h2"
+        >
+          {getTitle()}
+        </Header>
+        <Image
+          style={photoStyle}
+          centered
+          bordered
+          src={photo.urls.thumb}
+          srcSet={`${photo.urls.thumb} 200w, 
                       ${photo.urls.small} 400w, 
                       ${photo.urls.regular} 1080w`}
-          />
-        </Grid.Column>
-      </Grid>
-      <Menu borderless inverted={nightMode}>
+        />
+      </Container>
+
+      <Menu
+        inverted={nightMode}
+        style={{ marginTop: '1.5rem' }}
+        borderless
+        stackable
+      >
         <Menu.Item header link onClick={goToUserPage}>
           <Image style={{ paddingRight: '3px' }} avatar src={photo.user.profile_image.small} />
-          {`${photo.user.first_name} ${photo.user.last_name}`}
+          {photo.user.first_name.toLowerCase()}
+              &nbsp;
+          <span className="primary">
+            {photo.user.last_name ? photo.user.last_name.toLowerCase() : ''}
+          </span>
         </Menu.Item>
         {socialMedia('instagram')}
         {socialMedia('twitter')}
@@ -154,23 +171,16 @@ const Photo = ({
             <Icon
               name="download"
             />
+            download
           </a>
         </Menu.Item>
-        <Menu.Item>
-          <Button as="div" labelPosition="right">
-            <Button color="red">
-              <Icon name="heart" />
-              <Responsive style={{ display: 'inline' }} minWidth={Responsive.onlyTablet.minWidth}>
-                Likes
-              </Responsive>
-            </Button>
-            <Label as="a" basic color="red" pointing="left">
-              {photo.likes}
-            </Label>
-          </Button>
-        </Menu.Item>
       </Menu>
-      <Header as="h2">Related</Header>
+
+      <Header inverted={nightMode} as="h2">
+related
+        {' '}
+        <span className="primary">images</span>
+      </Header>
       <Masonry
         photos={filteredPhotos}
         getMorePhotos={getMorePhotos}

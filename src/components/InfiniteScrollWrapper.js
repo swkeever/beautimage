@@ -7,7 +7,7 @@ import childrenType from '../types/children';
 import photoType from '../types/photo';
 
 const InfiniteScrollWrapper = ({
-  children, photos, getMorePhotos, hasMore,
+  children, photos, getMorePhotos, hasMore, nightMode,
 }) => (
   <InfiniteScroll
     dataLength={photos.length} // This is important field to render the next data
@@ -15,7 +15,7 @@ const InfiniteScrollWrapper = ({
     scrollableTarget="iamge-gallery"
     hasMore={hasMore}
     endMessage={(
-      <Header textAlign="center">
+      <Header inverted={nightMode} textAlign="center">
         You have seen it all!
         {' '}
         <span role="img" aria-label="smiley">😄</span>
@@ -37,6 +37,7 @@ InfiniteScrollWrapper.propTypes = {
   photos: PropTypes.arrayOf(photoType).isRequired,
   getMorePhotos: PropTypes.func.isRequired,
   hasMore: PropTypes.bool.isRequired,
+  nightMode: PropTypes.bool.isRequired,
 };
 
 export default InfiniteScrollWrapper;

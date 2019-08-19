@@ -33,15 +33,20 @@ const Nav = ({
     history.push('/');
   };
 
+  console.log('mobile', Responsive.onlyMobile);
+  console.log('tablet', Responsive.onlyTablet);
+  console.log('desktop', Responsive.onlyComputer);
+
   const isHome = history.location.pathname === '/';
   const linkBehavior = isHome ? () => animateScroll.scrollToTop(scrollOptions) : backHome;
 
   return (
     <Menu borderless inverted={nightMode} fixed="top">
       <Menu.Item header onClick={linkBehavior}>
-        <Icon name="image" />
+        <Icon className="primary" name="image" />
         <Responsive minWidth={Responsive.onlyMobile.maxWidth}>
-          beautimage
+          beaut
+          <span className="primary">image</span>
         </Responsive>
       </Menu.Item>
       <Responsive minWidth={Responsive.onlyMobile.maxWidth}>
@@ -67,7 +72,7 @@ const Nav = ({
             type="text"
             onChange={({ target }) => setSearch(target.value)}
             value={search}
-            placeholder="Search..."
+            placeholder="search..."
             icon={<Icon inverted={nightMode} name="search" link onClick={executeSearch} />}
           />
         </Form>
