@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
 import {
-  BrowserRouter as Router,
+  HashRouter,
   Route,
 } from 'react-router-dom';
 import {
@@ -39,7 +39,7 @@ const App = () => {
   return (
     <MessageContext.Provider value={[message, setMessage]}>
       <Segment inverted={nightMode}>
-        <Router>
+        <HashRouter>
           <Notification />
           <Nav
             searchQuery={searchQuery}
@@ -84,7 +84,7 @@ const App = () => {
               />
             )}
           />
-        </Router>
+        </HashRouter>
       </Segment>
     </MessageContext.Provider>
   );
