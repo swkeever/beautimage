@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import {
-  Container, Loader, Image, Icon, Header, Grid, Menu, Button, Label, Responsive, Sidebar, Segment, Divider,
+  Container, Loader, Image, Icon, Header, Menu, Divider,
 } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
@@ -124,10 +124,6 @@ const Photo = ({
     setMessage,
     setHasMore,
   });
-
-  const photoStyle = photo.width > photo.height
-    ? { width: '100vw', height: 'auto' }
-    : { height: '100vh', width: 'auto' };
 
   return (
     <Container className="page">

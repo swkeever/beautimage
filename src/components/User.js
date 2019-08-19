@@ -87,7 +87,7 @@ const User = ({
           {user.last_name ? user.last_name.toLowerCase() : ''}
         </span>
       </Header>
-      <Container style={{margin: '1.5rem 0'}} textAlign="center">
+      <Container style={{ margin: '1.5rem 0' }} textAlign="center">
         <List inverted={nightMode} horizontal>
           {getSocialMediaLink({
             isAvailable: !!user.portfolio_url,
