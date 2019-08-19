@@ -4,9 +4,9 @@ import { AnimateOnChange } from 'react-animation';
 import { MessageContext } from '../App';
 
 const style = {
-  zIndex: 1000,
-  top: '5%',
+  top: '4rem',
   width: '100%',
+  marginBottom: '1rem',
   position: 'sticky',
 };
 
