@@ -2,12 +2,13 @@ import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import PropTypes from 'prop-types';
 import { Header } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
+import ReactRouterPropTypes from 'react-router-prop-types';
 import childrenType from '../types/children';
 import photoType from '../types/photo';
 
 const InfiniteScrollWrapper = ({
-  children, photos, getMorePhotos, hasMore, nightMode,
+  children, photos, getMorePhotos, hasMore, nightMode, history,
 }) => (
   <InfiniteScroll
     dataLength={photos.length} // This is important field to render the next data
@@ -19,12 +20,14 @@ const InfiniteScrollWrapper = ({
         You have seen it all!
         {' '}
         <span role="img" aria-label="smiley">😄</span>
-        <Header.Subheader>
+        {history.location.pathname === '/' ? null : (
+          <Header.Subheader>
           Go
-          {' '}
-          <Link to="/">home</Link>
+            {' '}
+            <Link to="/">home</Link>
           ?
-        </Header.Subheader>
+          </Header.Subheader>
+        )}
       </Header>
       )}
   >
@@ -38,6 +41,7 @@ InfiniteScrollWrapper.propTypes = {
   getMorePhotos: PropTypes.func.isRequired,
   hasMore: PropTypes.bool.isRequired,
   nightMode: PropTypes.bool.isRequired,
+  history: ReactRouterPropTypes.history.isRequired,
 };
 
-export default InfiniteScrollWrapper;
+export default withRouter(InfiniteScrollWrapper);

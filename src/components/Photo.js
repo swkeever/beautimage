@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import {
-  Container, Loader, Image, Icon, Header, Grid, Menu, Button, Label, Responsive, Sidebar, Segment,
+  Container, Loader, Image, Icon, Header, Grid, Menu, Button, Label, Responsive, Sidebar, Segment, Divider,
 } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
@@ -125,36 +125,25 @@ const Photo = ({
     setHasMore,
   });
 
-  const photoStyle = photo.width > photo.height 
-  ? {width: '100vw', height: 'auto'}
-  : {height: '100vh', width: 'auto'};
+  const photoStyle = photo.width > photo.height
+    ? { width: '100vw', height: 'auto' }
+    : { height: '100vh', width: 'auto' };
 
   return (
     <Container className="page">
-      <Container>
-        <Header
-          textAlign="center"
-          inverted={nightMode}
-          as="h2"
-        >
-          {getTitle()}
-        </Header>
-        <Image
-          style={photoStyle}
-          centered
-          bordered
-          src={photo.urls.thumb}
-          srcSet={`${photo.urls.thumb} 200w, 
-                      ${photo.urls.small} 400w, 
-                      ${photo.urls.regular} 1080w`}
-        />
-      </Container>
-
+      <Header
+        textAlign="left"
+        inverted={nightMode}
+        as="h2"
+      >
+        {getTitle()}
+      </Header>
       <Menu
         inverted={nightMode}
-        style={{ marginTop: '1.5rem' }}
         borderless
         stackable
+        secondary
+        fluid
       >
         <Menu.Item header link onClick={goToUserPage}>
           <Image style={{ paddingRight: '3px' }} avatar src={photo.user.profile_image.small} />
@@ -175,9 +164,18 @@ const Photo = ({
           </a>
         </Menu.Item>
       </Menu>
-
+      <Image
+        size="large"
+        centered
+        bordered
+        src={photo.urls.thumb}
+        srcSet={`${photo.urls.thumb} 200w, 
+                      ${photo.urls.small} 400w, 
+                      ${photo.urls.regular} 1080w`}
+      />
+      <Divider />
       <Header inverted={nightMode} as="h2">
-related
+        related
         {' '}
         <span className="primary">images</span>
       </Header>

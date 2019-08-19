@@ -33,10 +33,6 @@ const Nav = ({
     history.push('/');
   };
 
-  console.log('mobile', Responsive.onlyMobile);
-  console.log('tablet', Responsive.onlyTablet);
-  console.log('desktop', Responsive.onlyComputer);
-
   const isHome = history.location.pathname === '/';
   const linkBehavior = isHome ? () => animateScroll.scrollToTop(scrollOptions) : backHome;
 
