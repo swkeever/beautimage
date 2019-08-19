@@ -169,7 +169,7 @@ const Photo = ({
                       ${photo.urls.small} 400w, 
                       ${photo.urls.regular} 1080w`}
       />
-      <Divider />
+      <Divider inverted={nightMode} />
       <Header inverted={nightMode} as="h2">
         related
         {' '}
