@@ -73,7 +73,12 @@ const Nav = ({
           />
         </Form>
       </Menu.Item>
-      <Menu.Item position="right" active={nightMode} onClick={() => setNightMode(!nightMode)}>
+      <Menu.Item position="right">
+        <a href="https://www.github.com/swkeever/beautimage" target="_blank" rel="noopener noreferrer">
+          <Icon name="code" />
+        </a>
+      </Menu.Item>
+      <Menu.Item active={nightMode} onClick={() => setNightMode(!nightMode)}>
         <Icon name="moon" />
       </Menu.Item>
     </Menu>
