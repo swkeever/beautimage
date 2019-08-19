@@ -1,5 +1,9 @@
 # Beautimage
 
+Check out the project [here](https://swkeever.github.io/beautimage).
+
+## Introduction
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). Visit [their documentation](https://create-react-app.dev/docs/available-scripts) for more information on the scripts made available by Create React App.
 
 ## Setup
