@@ -89,13 +89,17 @@ const {
   func, bool, number,
 } = PropTypes;
 
+Nav.defaultProps = {
+  loading: false,
+};
+
 Nav.propTypes = {
   setSearchQuery: func.isRequired,
   nightMode: bool.isRequired,
   setNightMode: func.isRequired,
   columns: number.isRequired,
   setColumns: func.isRequired,
-  loading: bool.isRequired,
+  loading: bool,
   history: ReactRouterPropTypes.history.isRequired,
   scrollOptions: scrollOptionsType.isRequired,
 };
