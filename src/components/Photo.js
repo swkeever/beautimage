@@ -71,16 +71,7 @@ const Photo = ({
   }, [photoId]);
 
   const getTitle = () => {
-    let { title } = photo.story;
-
-    if (!title) {
-      title = photo.alt_description;
-
-      if (!title) {
-        title = `Photo ${photo.id}`;
-      }
-    }
-
+    const title = photo.description || `Photo ${photo.id}`;
     return title.toLowerCase();
   };
 
