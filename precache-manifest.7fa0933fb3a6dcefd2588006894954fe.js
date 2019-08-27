@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "50aebbfb7a3fc0a3b57982e514b56b23",
+    "revision": "efed30f33cf085c16934a4e2ba91beae",
     "url": "/beautimage/index.html"
   },
   {
-    "revision": "1be88f883773bc383b81",
+    "revision": "a32b8fe175151259d464",
     "url": "/beautimage/static/css/main.6bf06829.chunk.css"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/beautimage/static/js/2.08378323.chunk.js"
   },
   {
-    "revision": "1be88f883773bc383b81",
-    "url": "/beautimage/static/js/main.ac131e25.chunk.js"
+    "revision": "a32b8fe175151259d464",
+    "url": "/beautimage/static/js/main.b9a39ef7.chunk.js"
   },
   {
     "revision": "830380915335c9d1576c",

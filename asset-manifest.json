@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/beautimage/static/css/main.6bf06829.chunk.css",
-    "main.js": "/beautimage/static/js/main.ac131e25.chunk.js",
-    "main.js.map": "/beautimage/static/js/main.ac131e25.chunk.js.map",
+    "main.js": "/beautimage/static/js/main.b9a39ef7.chunk.js",
+    "main.js.map": "/beautimage/static/js/main.b9a39ef7.chunk.js.map",
     "runtime~main.js": "/beautimage/static/js/runtime~main.99b47f8e.js",
     "runtime~main.js.map": "/beautimage/static/js/runtime~main.99b47f8e.js.map",
     "static/js/2.08378323.chunk.js": "/beautimage/static/js/2.08378323.chunk.js",
     "static/js/2.08378323.chunk.js.map": "/beautimage/static/js/2.08378323.chunk.js.map",
     "index.html": "/beautimage/index.html",
-    "precache-manifest.a00e54aed189db7e25447872d1bef6d1.js": "/beautimage/precache-manifest.a00e54aed189db7e25447872d1bef6d1.js",
+    "precache-manifest.7fa0933fb3a6dcefd2588006894954fe.js": "/beautimage/precache-manifest.7fa0933fb3a6dcefd2588006894954fe.js",
     "service-worker.js": "/beautimage/service-worker.js",
     "static/css/main.6bf06829.chunk.css.map": "/beautimage/static/css/main.6bf06829.chunk.css.map"
   }
