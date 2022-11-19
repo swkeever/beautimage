@@ -13,7 +13,7 @@
     "react-infinite-scroll-component": "^4.5.3",
     "react-router-dom": "^5.0.1",
     "react-router-prop-types": "^1.0.4",
-    "react-scripts": "3.0.1",
+    "react-scripts": "5.0.1",
     "react-scroll": "^1.7.12",
     "semantic-ui-react": "^0.87.3",
     "@testing-library/jest-dom": "^4.0.0",
